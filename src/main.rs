@@ -4,6 +4,8 @@ extern crate orbclient;
 extern crate orbfont;
 extern crate orbtk;
 
+use std::thread;
+
 use orbtk::{Window, Rect, Point};
 use orbtk::traits::{Place, Click};
 
@@ -16,8 +18,8 @@ pub mod element_data;
 pub mod element_widget;
 pub mod gfxutils;
 
-const ELEMENT_WIDTH: u32 = 52;
-const ELEMENT_HEIGHT: u32 = 64;
+const ELEMENT_WIDTH: u32 = 36; //52;
+const ELEMENT_HEIGHT: u32 = 48; //64;
 const PADDING: u32 = 16;
 const WINDOW_WIDTH: u32 = ELEMENT_WIDTH * 18 + PADDING * 2;
 const WINDOW_HEIGHT: u32 = ELEMENT_HEIGHT * 10 + PADDING * 2;
@@ -42,16 +44,18 @@ fn main() {
         widget.position(x, y)
             .size(ELEMENT_WIDTH, ELEMENT_HEIGHT)
             .on_click(move |_widget: &ElementWidget, _point: Point| {
-                // on_click test
-                _widget.colorization.set(ColorizationMode::ByStates);
+                let element = _widget.element();
+                thread::spawn(move || {
+                    let window = Window::new(Rect::new(-1, -1, 400, 300), element.name);
+                    let widget = ElementWidget::new(element);
+                    widget.position(PADDING as i32, PADDING as i32)
+                        .size(ELEMENT_WIDTH * 4, ELEMENT_HEIGHT * 4);
+                    window.add(&widget);
+                    window.exec();
+                });
             });
         window.add(&widget);
     }
-
-    let widget = ElementWidget::new(&ELEMENTS[10]);
-    widget.position(150, 50)
-        .size(ELEMENT_WIDTH * 2, ELEMENT_HEIGHT * 2);
-    window.add(&widget);
 
     window.exec();
 }
