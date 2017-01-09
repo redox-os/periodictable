@@ -1,6 +1,6 @@
 [package]
 name = "periodictable"
-description = "Priodic table browser for Redox OS"
+description = "Periodic table browser for Redox OS"
 repository = "https://github.com/redox-os/orbutils"
 version = "0.0.1"
 license-file = "LICENSE"
@@ -13,5 +13,5 @@ path = "src/main.rs"
 
 [dependencies]
 orbclient = "0.2"
-orbfont = "0.1"
+orbfont = { git = "https://github.com/xtibor/orbfont.git" }
 orbtk = "0.2"

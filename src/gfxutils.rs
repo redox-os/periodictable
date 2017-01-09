@@ -34,5 +34,5 @@ pub fn draw_text(renderer: &mut Renderer, font: &Font, size: f32, text: &str, x1
     let y = if vcenter { y1 + h as i32 / 2 - text.height() as i32 / 2 } else { y1 };
 
     // TODO: Fix this
-    //text.draw(renderer, x, y, *color);
+    text.draw(renderer, x, y, *color);
 }
