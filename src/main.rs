@@ -48,5 +48,10 @@ fn main() {
         window.add(&widget);
     }
 
+    let widget = ElementWidget::new(&ELEMENTS[10]);
+    widget.position(150, 50)
+        .size(ELEMENT_WIDTH * 2, ELEMENT_HEIGHT * 2);
+    window.add(&widget);
+
     window.exec();
 }

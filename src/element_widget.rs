@@ -60,14 +60,18 @@ impl Widget for ElementWidget {
         let boldfont = Font::find(None, None, Some("Bold")).unwrap();        
         
         let color = get_element_color(e, self.colorization.get());
-        let textcolor = mult_color(&color, 0.20);
+        let textcolor = mult_color(&color, 0.20);        
+
+        let large_text_size = rect.width as f32 * 0.6;
+        let medium_text_size = rect.width as f32 * 0.3;
+        let small_text_size = rect.width as f32 * 0.2;
 
         draw_beveled_rect(renderer, rect.x, rect.y, rect.width, rect.height, &color);
-        draw_text(renderer, &boldfont, 32.0, e.symbol, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
-        draw_text(renderer, &boldfont, 16.0, &(e.atomic_number.to_string()), rect.x + 3, rect.y + 3, 0, 0, &textcolor, false, false);
-        draw_text(renderer, &font, 10.0, e.name, rect.x, rect.y + 44, rect.width, 0, &textcolor, false, true);       
+        draw_text(renderer, &boldfont, large_text_size, e.symbol, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
+        draw_text(renderer, &boldfont, medium_text_size, &(e.atomic_number.to_string()), rect.x + 3, rect.y + 3, 0, 0, &textcolor, false, false);
+        draw_text(renderer, &font, small_text_size, e.name, rect.x, rect.y + rect.height as i32 - small_text_size as i32 * 2 - 2, rect.width, 0, &textcolor, false, true);       
         if let Some(w) = e.weight {
-            draw_text(renderer, &font, 10.0, &(w.to_string()), rect.x, rect.y + 52, rect.width, 0, &textcolor, false, true);
+            draw_text(renderer, &font, small_text_size, &(w.to_string()), rect.x, rect.y  + rect.height as i32 - small_text_size as i32 - 2, rect.width, 0, &textcolor, false, true);
         }
     }
 
