@@ -11,8 +11,8 @@ use orbtk::widgets::Widget;
 use orbfont::Font;
 
 use gfxutils::{mult_color, draw_beveled_rect, draw_text};
-use element_colors::{get_category_color, ColorizationMode};
-use element_data::Category;
+use element_colors::{ColorizationMode, get_category_color, get_state_color};
+use element_data::{Category, State};
 
 pub struct LegendWidget {
     rect: Cell<Rect>,
@@ -50,6 +50,7 @@ impl Widget for LegendWidget {
 
         // TODO: Is there a better way to do this?
         match self.colorization.get() {
+            ColorizationMode::None => { },
             ColorizationMode::ByCategories => {
                 self.draw_legend_item(renderer, 0, "Alkali metal", &get_category_color(Category::AlkaliMetal));
                 self.draw_legend_item(renderer, 1, "Alkaline earth metal", &get_category_color(Category::AlkalineEarthMetal));
@@ -63,9 +64,14 @@ impl Widget for LegendWidget {
                 self.draw_legend_item(renderer, 9, "Actinide", &get_category_color(Category::Actinide));
                 self.draw_legend_item(renderer, 10, "Unknown", &get_category_color(Category::Unknown));
             },
-            _ =>  {
-                draw_beveled_rect(renderer, rect.x, rect.y, rect.width, rect.height, &Color::rgb(255, 0, 0));
-            }
+            ColorizationMode::ByStates => {
+                self.draw_legend_item(renderer, 2, "Solid", &get_state_color(State::Solid));
+                self.draw_legend_item(renderer, 3, "Liquid", &get_state_color(State::Liquid));
+                self.draw_legend_item(renderer, 4, "Gas", &get_state_color(State::Gas));
+                self.draw_legend_item(renderer, 8, "Plasma", &get_state_color(State::Plasma));
+                self.draw_legend_item(renderer, 9, "Unknown", &get_state_color(State::Unknown));
+            },
+            _ =>  { },
         }
     }
 

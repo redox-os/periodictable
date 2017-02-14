@@ -27,7 +27,7 @@ const WINDOW_WIDTH: u32 = ELEMENT_WIDTH * 18 + PADDING * 2;
 const WINDOW_HEIGHT: u32 = ELEMENT_HEIGHT * 10 + PADDING * 2;
 
 fn main() {
-    let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic table");
+    let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table of the Elements");
 
     // Element widgets
     for e in ELEMENTS.iter() {
