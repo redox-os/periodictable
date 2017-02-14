@@ -14,13 +14,19 @@ pub fn mult_color(color: &Color, n: f32) -> Color {
 }
 
 pub fn draw_beveled_rect(renderer: &mut Renderer, x1: i32, y1: i32, w: u32, h: u32, color: &Color) {
-    let shadow = mult_color(&color, 0.35);
-    let highlight = mult_color(&color, 1.25);
-
     let x2 = x1 + w as i32 - 1;
     let y2 = y1 + h as i32 - 1;
 
-    renderer.rect(x1, y1, w, h, *color);
+    renderer.linear_gradient(
+        x1, y1,
+        w, h,
+        x1, y1,
+        x2, y2,
+        *color, mult_color(&color, 0.80)
+    );
+
+    let shadow = mult_color(&color, 0.35);
+    let highlight = mult_color(&color, 1.25);
     renderer.line(x1, y1, x2, y1, highlight);
     renderer.line(x1, y1, x1, y2, highlight);
     renderer.line(x2, y2, x2, y1, shadow);
