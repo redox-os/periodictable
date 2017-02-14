@@ -12,10 +12,12 @@ use orbtk::traits::{Place, Click};
 use element_widget::ElementWidget;
 use element_data::{ELEMENTS, Position};
 use element_colors::ColorizationMode;
+use legend_widget::LegendWidget;
 
 pub mod element_colors;
 pub mod element_data;
 pub mod element_widget;
+pub mod legend_widget;
 pub mod gfxutils;
 
 const ELEMENT_WIDTH: u32 = 36; //52;
@@ -27,6 +29,7 @@ const WINDOW_HEIGHT: u32 = ELEMENT_HEIGHT * 10 + PADDING * 2;
 fn main() {
     let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic table");
 
+    // Element widgets
     for e in ELEMENTS.iter() {
         let x = (match e.position {
             Position::MainTable { group, .. } => group - 1,
@@ -47,15 +50,24 @@ fn main() {
                 let element = _widget.element();
                 thread::spawn(move || {
                     let window = Window::new(Rect::new(-1, -1, 400, 300), element.name);
+
                     let widget = ElementWidget::new(element);
                     widget.position(PADDING as i32, PADDING as i32)
                         .size(ELEMENT_WIDTH * 4, ELEMENT_HEIGHT * 4);
                     window.add(&widget);
+
                     window.exec();
                 });
             });
         window.add(&widget);
     }
+
+    // Legend widget
+    let legend = LegendWidget::new();
+    // TODO: Calculate widget bounds properly
+    legend.position((PADDING + 3 * ELEMENT_WIDTH) as i32, PADDING as i32 + (ELEMENT_HEIGHT / 4) as i32)
+        .size(8 * ELEMENT_WIDTH, 2 * ELEMENT_HEIGHT);
+    window.add(&legend);
 
     window.exec();
 }
