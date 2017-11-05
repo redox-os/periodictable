@@ -13,7 +13,7 @@ pub fn mult_color(color: &Color, n: f32) -> Color {
     )
 }
 
-pub fn draw_beveled_rect(renderer: &mut Renderer, x1: i32, y1: i32, w: u32, h: u32, color: &Color) {
+pub fn draw_beveled_rect<R: Renderer + ?Sized>(renderer: &mut R, x1: i32, y1: i32, w: u32, h: u32, color: &Color) {
     let x2 = x1 + w as i32 - 1;
     let y2 = y1 + h as i32 - 1;
 
@@ -33,7 +33,7 @@ pub fn draw_beveled_rect(renderer: &mut Renderer, x1: i32, y1: i32, w: u32, h: u
     renderer.line(x2, y2, x1, y2, shadow);
 }
 
-pub fn draw_text(renderer: &mut Renderer, font: &Font, size: f32, text: &str, x1: i32, y1: i32, w: u32, h: u32, color: &Color, vcenter: bool, hcenter: bool) {
+pub fn draw_text<R: Renderer + ?Sized>(renderer: &mut R, font: &Font, size: f32, text: &str, x1: i32, y1: i32, w: u32, h: u32, color: &Color, vcenter: bool, hcenter: bool) {
     let text = font.render(text, size);
 
     let x = if hcenter { x1 + w as i32 / 2 - text.width() as i32 / 2 } else { x1 };

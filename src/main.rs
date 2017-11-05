@@ -27,7 +27,7 @@ const WINDOW_WIDTH: u32 = ELEMENT_WIDTH * 18 + PADDING * 2;
 const WINDOW_HEIGHT: u32 = ELEMENT_HEIGHT * 10 + PADDING * 2;
 
 fn main() {
-    let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table of the Elements");
+    let mut window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table of the Elements");
 
     // Element widgets
     for e in ELEMENTS.iter() {
@@ -49,7 +49,7 @@ fn main() {
             .on_click(move |_widget: &ElementWidget, _point: Point| {
                 let element = _widget.element();
                 thread::spawn(move || {
-                    let window = Window::new(Rect::new(-1, -1, 400, 300), element.name);
+                    let mut window = Window::new(Rect::new(-1, -1, 400, 300), element.name);
 
                     let widget = ElementWidget::new(element);
                     widget.position(PADDING as i32, PADDING as i32)

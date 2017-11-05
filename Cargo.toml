@@ -12,6 +12,6 @@ name = "periodictable"
 path = "src/main.rs"
 
 [dependencies]
-orbclient = "0.2"
-orbfont = { git = "https://github.com/xtibor/orbfont.git" }
-orbtk = "0.2"
+orbclient = "0.3.12"
+orbfont = "0.1.8"
+orbtk = "0.2.25"
