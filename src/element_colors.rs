@@ -4,8 +4,8 @@ use natural_constants::chemistry::{SubCategory, StateOfMatter, AtomInfo};
 const ACTIVE_COLOR: Color = Color::rgb(230, 114, 114);
 const INACTIVE_COLOR: Color = Color::rgb(165, 165, 165);
 
-pub fn get_category_color(category: &SubCategory) -> Color {
-    match *category {
+pub fn get_category_color(sub_category: &SubCategory) -> Color {
+    match *sub_category {
         // Color::hsv(18 + i * 36, 128, 230)
         SubCategory::AlkaliMetal         => Color::rgb(230, 149, 114),
         SubCategory::AlkalineEarthMetal  => Color::rgb(230, 219, 114),
@@ -21,8 +21,8 @@ pub fn get_category_color(category: &SubCategory) -> Color {
     }
 }
 
-pub fn get_state_color(state: &StateOfMatter) -> Color {
-    match *state {
+pub fn get_state_color(state_of_matter: &StateOfMatter) -> Color {
+    match *state_of_matter {
         StateOfMatter::Solid   => Color::rgb(230, 149, 114),
         StateOfMatter::Gas     => Color::rgb(172, 230, 114),
         StateOfMatter::Liquid  => Color::rgb(114, 230, 196),

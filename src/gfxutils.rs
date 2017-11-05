@@ -1,6 +1,7 @@
-use orbfont::Font;
-use orbclient::{Color, Renderer};
 use std::cmp;
+
+use orbclient::{Color, Renderer};
+use orbfont::Font;
 
 pub fn mult_color(color: &Color, n: f32) -> Color {
     Color::rgb(
