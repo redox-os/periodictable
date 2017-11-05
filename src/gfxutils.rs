@@ -1,6 +1,3 @@
-extern crate orbclient;
-extern crate orbfont;
-
 use orbfont::Font;
 use orbclient::{Color, Renderer};
 use std::cmp;
@@ -17,14 +14,7 @@ pub fn draw_beveled_rect<R: Renderer + ?Sized>(renderer: &mut R, x1: i32, y1: i3
     let x2 = x1 + w as i32 - 1;
     let y2 = y1 + h as i32 - 1;
 
-    renderer.linear_gradient(
-        x1, y1,
-        w, h,
-        x1, y1,
-        x2, y2,
-        *color, mult_color(&color, 0.80)
-    );
-
+    renderer.linear_gradient( x1, y1, w, h, x1, y1, x2, y2, *color, mult_color(&color, 0.80));
     let shadow = mult_color(&color, 0.35);
     let highlight = mult_color(&color, 1.25);
     renderer.line(x1, y1, x2, y1, highlight);

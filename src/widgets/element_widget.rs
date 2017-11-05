@@ -10,19 +10,19 @@ use orbtk::widgets::Widget;
 
 use orbfont::Font;
 
-use element_data::Element;
+use natural_constants::chemistry::AtomInfo;
 use gfxutils::{mult_color, draw_beveled_rect, draw_text};
 use element_colors::{get_element_color, ColorizationMode};
 
 pub struct ElementWidget {
     rect: Cell<Rect>,
-    element: Cell<&'static Element>,
+    element: Cell<&'static AtomInfo>,
     colorization: Cell<ColorizationMode>,
     click_callback: RefCell<Option<Arc<Fn(&ElementWidget, Point)>>>,
 }
 
 impl ElementWidget {
-    pub fn new(e: &'static Element) -> Arc<Self> {
+    pub fn new(e: &'static AtomInfo) -> Arc<Self> {
         Arc::new(ElementWidget {
             rect: Cell::new(Rect::default()),
             element: Cell::new(e),
@@ -31,7 +31,7 @@ impl ElementWidget {
         })
     }
 
-    pub fn element(&self) -> &'static Element {
+    pub fn element(&self) -> &'static AtomInfo {
         &self.element.get()
     }
 }
@@ -71,14 +71,12 @@ impl Widget for ElementWidget {
         let small_text_size = rect.width as f32 * 0.2;
 
         draw_beveled_rect(renderer, rect.x, rect.y, rect.width, rect.height, &color);
-        draw_text(renderer, &boldfont, large_text_size, e.symbol, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
+        draw_text(renderer, &boldfont, large_text_size, e.name, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
         draw_text(renderer, &boldfont, medium_text_size, &(e.atomic_number.to_string()), rect.x + 3, rect.y + 3, 0, 0, &textcolor, false, false);
 
         if small_text_size >= 6.0 {
-            draw_text(renderer, &font, small_text_size, e.name, rect.x, rect.y + rect.height as i32 - small_text_size as i32 * 2 - 2, rect.width, 0, &textcolor, false, true);
-            if let Some(w) = e.weight {
-                draw_text(renderer, &font, small_text_size, &(w.to_string()), rect.x, rect.y  + rect.height as i32 - small_text_size as i32 - 2, rect.width, 0, &textcolor, false, true);
-            }
+            draw_text(renderer, &font, small_text_size, e.full_name, rect.x, rect.y + rect.height as i32 - small_text_size as i32 * 2 - 2, rect.width, 0, &textcolor, false, true);
+            draw_text(renderer, &font, small_text_size, &(e.mass.to_string()), rect.x, rect.y  + rect.height as i32 - small_text_size as i32 - 2, rect.width, 0, &textcolor, false, true);
         }
     }
 

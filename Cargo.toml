@@ -12,6 +12,7 @@ name = "periodictable"
 path = "src/main.rs"
 
 [dependencies]
+natural_constants = { git = "https://github.com/xtibor/natural_constants", branch = "fix-radium"}
 orbclient = "0.3.12"
-orbfont = "0.1.8"
+orbfont = { git = "https://github.com/redox-os/orbfont" }
 orbtk = "0.2.25"

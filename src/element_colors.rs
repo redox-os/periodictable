@@ -1,7 +1,5 @@
-extern crate orbclient;
-
 use orbclient::Color;
-use element_data::{Category, State, Element};
+use natural_constants::chemistry::{SubCategory, StateOfMatter, AtomInfo};
 
 const ACTIVE_COLOR: Color = Color::rgb(230, 114, 114);
 const INACTIVE_COLOR: Color = Color::rgb(165, 165, 165);
@@ -31,30 +29,30 @@ fn eval_threshold_option<T: PartialOrd>(threshold: Threshold<T>, value: Option<T
     }
 }
 
-pub fn get_category_color(category: Category) -> Color {
-    match category {
+pub fn get_category_color(category: &SubCategory) -> Color {
+    match *category {
         // Color::hsv(18 + i * 36, 128, 230)
-        Category::AlkaliMetal         => Color::rgb(230, 149, 114),
-        Category::AlkalineEarthMetal  => Color::rgb(230, 219, 114),
-        Category::TransitionMetal     => Color::rgb(172, 230, 114),
-        Category::PostTransitionMetal => Color::rgb(114, 230, 126),
-        Category::Metalloid           => Color::rgb(114, 230, 196),
-        Category::PolyatomicNonmetal  => Color::rgb(114, 196, 230),
-        Category::DiatomicNonmetal    => Color::rgb(114, 126, 230),
-        Category::NobleGas            => Color::rgb(172, 114, 230),
-        Category::Lanthanide          => Color::rgb(230, 114, 219),
-        Category::Actinide            => Color::rgb(230, 114, 153),
-        Category::Unknown             => INACTIVE_COLOR,
+        SubCategory::AlkaliMetal         => Color::rgb(230, 149, 114),
+        SubCategory::AlkalineEarthMetal  => Color::rgb(230, 219, 114),
+        SubCategory::TransitionMetal     => Color::rgb(172, 230, 114),
+        SubCategory::PostTransitionMetal => Color::rgb(114, 230, 126),
+        SubCategory::Metalloid           => Color::rgb(114, 230, 196),
+        SubCategory::PolyatomicNonMetal  => Color::rgb(114, 196, 230),
+        SubCategory::DiatomicNonMetal    => Color::rgb(114, 126, 230),
+        SubCategory::NobleGas            => Color::rgb(172, 114, 230),
+        SubCategory::Lanthanide          => Color::rgb(230, 114, 219),
+        SubCategory::Actinide            => Color::rgb(230, 114, 153),
+        SubCategory::Unknown             => INACTIVE_COLOR,
     }
 }
 
-pub fn get_state_color(state: State) -> Color {
-    match state {
-        State::Solid   => Color::rgb(230, 149, 114),
-        State::Gas     => Color::rgb(172, 230, 114),
-        State::Liquid  => Color::rgb(114, 230, 196),
-        State::Plasma  => Color::rgb(114, 126, 230),
-        State::Unknown => INACTIVE_COLOR,
+pub fn get_state_color(state: &StateOfMatter) -> Color {
+    match *state {
+        StateOfMatter::Solid   => Color::rgb(230, 149, 114),
+        StateOfMatter::Gas     => Color::rgb(172, 230, 114),
+        StateOfMatter::Liquid  => Color::rgb(114, 230, 196),
+        //StateOfMatter::Plasma  => Color::rgb(114, 126, 230),
+        StateOfMatter::Unknown => INACTIVE_COLOR,
     }
 }
 
@@ -62,11 +60,7 @@ pub fn get_state_color(state: State) -> Color {
 pub enum ColorizationMode {
     None,
     ByCategories,
-    ByCategory(Category),
     ByStates,
-    ByState(State),
-    ByWeightThreshold(Threshold<f32>),
-    ByAtomicNumberThreshold(Threshold<i32>),
 }
 
 fn bool_to_color(value: bool) -> Color {
@@ -77,28 +71,16 @@ fn bool_to_color(value: bool) -> Color {
     }
 }
 
-pub fn get_element_color(element: &Element, cm: ColorizationMode) -> Color {
+pub fn get_element_color(element: &AtomInfo, cm: ColorizationMode) -> Color {
     match cm {
         ColorizationMode::None => {
             bool_to_color(false)
         },
         ColorizationMode::ByCategories => {
-            get_category_color(element.category)
-        },
-        ColorizationMode::ByCategory(c) => {
-            bool_to_color(element.category == c)
+            get_category_color(&element.sub_category)
         },
         ColorizationMode::ByStates => {
-            get_state_color(element.state)
-        },
-        ColorizationMode::ByState(s) => {
-            bool_to_color(element.state == s)
-        },
-        ColorizationMode::ByWeightThreshold(threshold) => {
-            bool_to_color(eval_threshold_option(threshold, element.weight))
-        },
-        ColorizationMode::ByAtomicNumberThreshold(threshold) => {
-            bool_to_color(eval_threshold(threshold, element.atomic_number))
+            get_state_color(&element.state_of_matter)
         },
     }
 }
