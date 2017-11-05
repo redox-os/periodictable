@@ -8,8 +8,6 @@ use orbtk::rect::Rect;
 use orbtk::traits::{Click, Place};
 use orbtk::widgets::Widget;
 
-use orbfont::Font;
-
 use natural_constants::chemistry::AtomInfo;
 use gfxutils::{mult_color, draw_beveled_rect, draw_text};
 use element_colors::{get_element_color, ColorizationMode};
@@ -60,9 +58,6 @@ impl Widget for ElementWidget {
         let rect = self.rect.get();
         let e = self.element.get();
 
-        let font = Font::find(None, None, None).unwrap();
-        let boldfont = Font::find(None, None, Some("Bold")).unwrap();
-
         let color = get_element_color(e, self.colorization.get());
         let textcolor = mult_color(&color, 0.2);
 
@@ -71,12 +66,12 @@ impl Widget for ElementWidget {
         let small_text_size = rect.width as f32 * 0.2;
 
         draw_beveled_rect(renderer, rect.x, rect.y, rect.width, rect.height, &color);
-        draw_text(renderer, &boldfont, large_text_size, e.name, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
-        draw_text(renderer, &boldfont, medium_text_size, &(e.atomic_number.to_string()), rect.x + 3, rect.y + 3, 0, 0, &textcolor, false, false);
+        draw_text(renderer, &super::BOLD_FONT, large_text_size, e.name, rect.x, rect.y, rect.width, rect.height, &textcolor, true, true);
+        draw_text(renderer, &super::BOLD_FONT, medium_text_size, &(e.atomic_number.to_string()), rect.x + 3, rect.y + 3, 0, 0, &textcolor, false, false);
 
         if small_text_size >= 6.0 {
-            draw_text(renderer, &font, small_text_size, e.full_name, rect.x, rect.y + rect.height as i32 - small_text_size as i32 * 2 - 2, rect.width, 0, &textcolor, false, true);
-            draw_text(renderer, &font, small_text_size, &(e.mass.to_string()), rect.x, rect.y  + rect.height as i32 - small_text_size as i32 - 2, rect.width, 0, &textcolor, false, true);
+            draw_text(renderer, &super::FONT, small_text_size, e.full_name, rect.x, rect.y + rect.height as i32 - small_text_size as i32 * 2 - 2, rect.width, 0, &textcolor, false, true);
+            draw_text(renderer, &super::FONT, small_text_size, &(e.mass.to_string()), rect.x, rect.y  + rect.height as i32 - small_text_size as i32 - 2, rect.width, 0, &textcolor, false, true);
         }
     }
 

@@ -4,6 +4,8 @@ extern crate natural_constants;
 extern crate orbclient;
 extern crate orbfont;
 extern crate orbtk;
+#[macro_use]
+extern crate lazy_static;
 
 use std::thread;
 
@@ -45,25 +47,25 @@ fn main() {
 
     // Element widgets
     for e in ATOMS.iter() {
-        let x = (match e.sub_category {
-            SubCategory::Lanthanide => 2 + (e.atomic_number - 57),
-            SubCategory::Actinide => 2 + (e.atomic_number - 89),
-            _ => e.group - 1,
-        } * ELEMENT_WIDTH + PADDING) as i32;
-
-        let y = (match e.sub_category {
-            SubCategory::Lanthanide => 8,
-            SubCategory::Actinide => 9,
-            _ => e.period as u32 - 1,
-        } * ELEMENT_HEIGHT + PADDING) as i32;
+        let (x, y) = match e.atomic_number {
+            71 => (2, 5), // Lutetium
+            103 => (2, 6), // Lawrencium
+            _ => {
+                match e.sub_category {
+                    SubCategory::Lanthanide => (2 + (e.atomic_number - 57), 8),
+                    SubCategory::Actinide => (2 + (e.atomic_number - 89), 9),
+                    _ => (e.group - 1, e.period as u32 - 1),
+                }
+            }
+        };
 
         let widget = ElementWidget::new(&e);
-        widget.position(x, y)
+        widget.position((x * ELEMENT_WIDTH + PADDING) as i32, (y * ELEMENT_HEIGHT + PADDING) as i32)
             .size(ELEMENT_WIDTH, ELEMENT_HEIGHT)
             .on_click(move |_widget: &ElementWidget, _point: Point| {
                 let element = _widget.element();
                 thread::spawn(move || {
-                    let mut window = Window::new(Rect::new(-1, -1, 400, 300), element.name);
+                    let mut window = Window::new(Rect::new(-1, -1, 400, 300), element.full_name);
 
                     let widget = ElementWidget::new(element);
                     widget.position(PADDING as i32, PADDING as i32)
