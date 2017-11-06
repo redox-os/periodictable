@@ -6,7 +6,7 @@ use widgets::AtomWidget;
 use colors::ColorizationMode;
 
 pub fn create_atom_window(atom: &'static AtomInfo, colorization: ColorizationMode) -> Window {
-    let window = Window::new(Rect::new(-1, -1, 532, 288), atom.full_name);
+    let window = Window::new(Rect::new(-1, -1, 532, 288), &format!("{} - Periodic Table", atom.full_name));
 
     {
         let widget = AtomWidget::new(atom);

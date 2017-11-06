@@ -32,7 +32,7 @@ static ATOMS: [&AtomInfo; 118] = [
 ];
 
 pub fn create_main_window() -> Window {
-    let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table");
+    let window = Window::new(Rect::new(-1, -1, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table");
     let colorization = ColorizationMode::ByCategories;
 
     for atom in ATOMS.iter() {
