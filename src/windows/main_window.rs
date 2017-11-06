@@ -53,7 +53,7 @@ pub fn create_main_window() -> Window {
             .size(ATOM_WIDTH, ATOM_HEIGHT)
             .colorization(colorization)
             .on_click(move |sender: &AtomWidget, _| {
-                let atom = sender.atom();
+                let atom = sender.atom.get();
                 //thread::spawn(move || {
                     let mut atom_window = ::windows::create_atom_window(&atom, sender.colorization.get());
                     atom_window.exec();

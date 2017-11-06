@@ -14,7 +14,7 @@ use widgets::{draw_beveled_rect, draw_text, multiply_color};
 
 pub struct AtomWidget {
     rect: Cell<Rect>,
-    atom: Cell<&'static AtomInfo>,
+    pub atom: Cell<&'static AtomInfo>,
     pub colorization: Cell<ColorizationMode>,
     click_callback: RefCell<Option<Arc<Fn(&AtomWidget, Point)>>>,
 }
@@ -27,10 +27,6 @@ impl AtomWidget {
             colorization: Cell::new(ColorizationMode::None),
             click_callback: RefCell::new(None)
         })
-    }
-
-    pub fn atom(&self) -> &'static AtomInfo {
-        &self.atom.get()
     }
 
     pub fn colorization(&self, colorization: ColorizationMode) -> &Self {
