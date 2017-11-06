@@ -5,6 +5,7 @@ use orbtk::traits::{Place, Click};
 use orbtk::{Rect, Window};
 
 use widgets::{AtomWidget, LegendWidget};
+use colors::ColorizationMode;
 
 const ATOM_WIDTH: u32 = 36;
 const ATOM_HEIGHT: u32 = 48;
@@ -32,6 +33,7 @@ static ATOMS: [&AtomInfo; 118] = [
 
 pub fn create_main_window() -> Window {
     let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table");
+    let colorization = ColorizationMode::ByCategories;
 
     for atom in ATOMS.iter() {
         let (x, y) = match atom.atomic_number {
@@ -49,22 +51,24 @@ pub fn create_main_window() -> Window {
         let widget = AtomWidget::new(&atom);
         widget.position((x * ATOM_WIDTH + PADDING) as i32, (y * ATOM_HEIGHT + PADDING) as i32)
             .size(ATOM_WIDTH, ATOM_HEIGHT)
+            .colorization(colorization)
             .on_click(move |sender: &AtomWidget, _| {
                 let atom = sender.atom();
                 //thread::spawn(move || {
-                    let mut atom_window = ::windows::create_atom_window(&atom);
+                    let mut atom_window = ::windows::create_atom_window(&atom, sender.colorization.get());
                     atom_window.exec();
                 //});
             });
         window.add(&widget);
     }
 
-    // Legend widget
-    let legend = LegendWidget::new();
-    // TODO: Calculate widget bounds properly
-    legend.position((PADDING + 3 * ATOM_WIDTH) as i32, PADDING as i32 + (ATOM_HEIGHT / 4) as i32)
-        .size(8 * ATOM_WIDTH, 2 * ATOM_HEIGHT);
-    window.add(&legend);
+    {
+        let widget = LegendWidget::new();
+        widget.position((PADDING + 3 * ATOM_WIDTH) as i32, PADDING as i32 + (ATOM_HEIGHT / 4) as i32)
+            .size(8 * ATOM_WIDTH, 2 * ATOM_HEIGHT)
+            .colorization(colorization);
+        window.add(&widget);
+    }
 
     window
 }

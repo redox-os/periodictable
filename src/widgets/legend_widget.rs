@@ -12,7 +12,7 @@ use orbtk::widgets::Widget;
 
 pub struct LegendWidget {
     rect: Cell<Rect>,
-    colorization: Cell<ColorizationMode>,
+    pub colorization: Cell<ColorizationMode>,
 }
 
 impl LegendWidget {
@@ -21,6 +21,11 @@ impl LegendWidget {
             rect: Cell::new(Rect::default()),
             colorization: Cell::new(ColorizationMode::ByCategories),
         })
+    }
+
+    pub fn colorization(&self, colorization: ColorizationMode) -> &Self {
+        self.colorization.set(colorization);
+        self
     }
 }
 
@@ -57,10 +62,10 @@ impl Widget for LegendWidget {
                 draw_item(10, "Unknown",               &sub_category_color(&SubCategory::Unknown            ));
             },
             ColorizationMode::ByStates => {
-                draw_item(2, "Solid",   &state_of_matter_color(&StateOfMatter::Solid  ));
-                draw_item(3, "Liquid",  &state_of_matter_color(&StateOfMatter::Liquid ));
-                draw_item(4, "Gas",     &state_of_matter_color(&StateOfMatter::Gas    ));
-                draw_item(8, "Unknown", &state_of_matter_color(&StateOfMatter::Unknown));
+                draw_item(1, "Solid",   &state_of_matter_color(&StateOfMatter::Solid  ));
+                draw_item(2, "Liquid",  &state_of_matter_color(&StateOfMatter::Liquid ));
+                draw_item(3, "Gas",     &state_of_matter_color(&StateOfMatter::Gas    ));
+                draw_item(4, "Unknown", &state_of_matter_color(&StateOfMatter::Unknown));
             },
         }
     }

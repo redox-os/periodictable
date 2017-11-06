@@ -3,14 +3,16 @@ use orbtk::traits::Place;
 use orbtk::{Rect, Text, TextBox, Window};
 
 use widgets::AtomWidget;
+use colors::ColorizationMode;
 
-pub fn create_atom_window(atom: &'static AtomInfo) -> Window {
+pub fn create_atom_window(atom: &'static AtomInfo, colorization: ColorizationMode) -> Window {
     let window = Window::new(Rect::new(-1, -1, 532, 288), atom.full_name);
 
     {
         let widget = AtomWidget::new(atom);
         widget.position(16, 16)
-            .size(192, 256);
+            .size(192, 256)
+            .colorization(colorization);
         window.add(&widget);
     }
 
