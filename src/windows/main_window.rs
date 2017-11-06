@@ -2,15 +2,15 @@ use std::thread;
 
 use natural_constants::chemistry::*;
 use orbtk::traits::{Place, Click};
-use orbtk::{Point, Rect, Window};
+use orbtk::{Rect, Window};
 
-use widgets::{ElementWidget, LegendWidget};
+use widgets::{AtomWidget, LegendWidget};
 
-const ELEMENT_WIDTH: u32 = 36; //52;
-const ELEMENT_HEIGHT: u32 = 48; //64;
+const ATOM_WIDTH: u32 = 36;
+const ATOM_HEIGHT: u32 = 48;
 const PADDING: u32 = 16;
-const WINDOW_WIDTH: u32 = ELEMENT_WIDTH * 18 + PADDING * 2;
-const WINDOW_HEIGHT: u32 = ELEMENT_HEIGHT * 10 + PADDING * 2;
+const WINDOW_WIDTH: u32 = ATOM_WIDTH * 18 + PADDING * 2;
+const WINDOW_HEIGHT: u32 = ATOM_HEIGHT * 10 + PADDING * 2;
 
 static ATOMS: [&AtomInfo; 118] = [
     &atom_h,  &atom_he, &atom_li, &atom_be, &atom_b,  &atom_c,  &atom_n,  &atom_o,
@@ -33,29 +33,28 @@ static ATOMS: [&AtomInfo; 118] = [
 pub fn create_main_window() -> Window {
     let window = Window::new(Rect::new(10, 10, WINDOW_WIDTH, WINDOW_HEIGHT), "Periodic Table");
 
-    // Element widgets
-    for e in ATOMS.iter() {
-        let (x, y) = match e.atomic_number {
+    for atom in ATOMS.iter() {
+        let (x, y) = match atom.atomic_number {
             71 => (2, 5), // Lutetium
             103 => (2, 6), // Lawrencium
             _ => {
-                match e.sub_category {
-                    SubCategory::Lanthanide => (2 + (e.atomic_number - 57), 8),
-                    SubCategory::Actinide => (2 + (e.atomic_number - 89), 9),
-                    _ => (e.group - 1, e.period as u32 - 1),
+                match atom.sub_category {
+                    SubCategory::Lanthanide => (2 + (atom.atomic_number - 57), 8),
+                    SubCategory::Actinide => (2 + (atom.atomic_number - 89), 9),
+                    _ => (atom.group - 1, atom.period as u32 - 1),
                 }
             }
         };
 
-        let widget = ElementWidget::new(&e);
-        widget.position((x * ELEMENT_WIDTH + PADDING) as i32, (y * ELEMENT_HEIGHT + PADDING) as i32)
-            .size(ELEMENT_WIDTH, ELEMENT_HEIGHT)
-            .on_click(move |sender: &ElementWidget, _point: Point| {
-                let element = sender.element();
-                thread::spawn(move || {
-                    let mut atom_window = ::windows::create_atom_window(&element);
+        let widget = AtomWidget::new(&atom);
+        widget.position((x * ATOM_WIDTH + PADDING) as i32, (y * ATOM_HEIGHT + PADDING) as i32)
+            .size(ATOM_WIDTH, ATOM_HEIGHT)
+            .on_click(move |sender: &AtomWidget, _| {
+                let atom = sender.atom();
+                //thread::spawn(move || {
+                    let mut atom_window = ::windows::create_atom_window(&atom);
                     atom_window.exec();
-                });
+                //});
             });
         window.add(&widget);
     }
@@ -63,8 +62,8 @@ pub fn create_main_window() -> Window {
     // Legend widget
     let legend = LegendWidget::new();
     // TODO: Calculate widget bounds properly
-    legend.position((PADDING + 3 * ELEMENT_WIDTH) as i32, PADDING as i32 + (ELEMENT_HEIGHT / 4) as i32)
-        .size(8 * ELEMENT_WIDTH, 2 * ELEMENT_HEIGHT);
+    legend.position((PADDING + 3 * ATOM_WIDTH) as i32, PADDING as i32 + (ATOM_HEIGHT / 4) as i32)
+        .size(8 * ATOM_WIDTH, 2 * ATOM_HEIGHT);
     window.add(&legend);
 
     window

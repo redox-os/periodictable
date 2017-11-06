@@ -1,40 +1,40 @@
-use orbclient::Renderer;
 use std::cell::{Cell, RefCell};
 use std::sync::Arc;
 
+use natural_constants::chemistry::AtomInfo;
+use orbclient::Renderer;
 use orbtk::event::Event;
 use orbtk::point::Point;
 use orbtk::rect::Rect;
 use orbtk::traits::{Click, Place};
 use orbtk::widgets::Widget;
 
-use natural_constants::chemistry::AtomInfo;
-use gfxutils::{mult_color, draw_beveled_rect, draw_text};
-use element_colors::{get_element_color, ColorizationMode};
+use colors::{atom_color, ColorizationMode};
+use widgets::{draw_beveled_rect, draw_text, multiply_color};
 
-pub struct ElementWidget {
+pub struct AtomWidget {
     rect: Cell<Rect>,
-    element: Cell<&'static AtomInfo>,
+    atom: Cell<&'static AtomInfo>,
     colorization: Cell<ColorizationMode>,
-    click_callback: RefCell<Option<Arc<Fn(&ElementWidget, Point)>>>,
+    click_callback: RefCell<Option<Arc<Fn(&AtomWidget, Point)>>>,
 }
 
-impl ElementWidget {
+impl AtomWidget {
     pub fn new(e: &'static AtomInfo) -> Arc<Self> {
-        Arc::new(ElementWidget {
+        Arc::new(AtomWidget {
             rect: Cell::new(Rect::default()),
-            element: Cell::new(e),
+            atom: Cell::new(e),
             colorization: Cell::new(ColorizationMode::ByCategories),
             click_callback: RefCell::new(None)
         })
     }
 
-    pub fn element(&self) -> &'static AtomInfo {
-        &self.element.get()
+    pub fn atom(&self) -> &'static AtomInfo {
+        &self.atom.get()
     }
 }
 
-impl Click for ElementWidget {
+impl Click for AtomWidget {
     fn emit_click(&self, point: Point) {
         if let Some(ref click_callback) = *self.click_callback.borrow() {
             click_callback(self, point);
@@ -47,19 +47,19 @@ impl Click for ElementWidget {
     }
 }
 
-impl Place for ElementWidget {}
+impl Place for AtomWidget {}
 
-impl Widget for ElementWidget {
+impl Widget for AtomWidget {
     fn rect(&self) -> &Cell<Rect> {
         &self.rect
     }
 
     fn draw(&self, renderer: &mut Renderer, _focused: bool) {
         let rect = self.rect.get();
-        let e = self.element.get();
+        let e = self.atom.get();
 
-        let color = get_element_color(e, self.colorization.get());
-        let textcolor = mult_color(&color, 0.2);
+        let color = atom_color(e, self.colorization.get());
+        let textcolor = multiply_color(&color, 0.2);
 
         let large_text_size = rect.width as f32 * 0.6;
         let medium_text_size = rect.width as f32 * 0.3;

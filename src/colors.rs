@@ -1,10 +1,18 @@
 use orbclient::Color;
+
 use natural_constants::chemistry::{SubCategory, StateOfMatter, AtomInfo};
 
 const ACTIVE_COLOR: Color = Color::rgb(230, 114, 114);
 const INACTIVE_COLOR: Color = Color::rgb(165, 165, 165);
 
-pub fn get_category_color(sub_category: &SubCategory) -> Color {
+#[derive(Copy, Clone)]
+pub enum ColorizationMode {
+    None,
+    ByCategories,
+    ByStates,
+}
+
+pub fn sub_category_color(sub_category: &SubCategory) -> Color {
     match *sub_category {
         // Color::hsv(18 + i * 36, 128, 230)
         SubCategory::AlkaliMetal         => Color::rgb(230, 149, 114),
@@ -21,7 +29,7 @@ pub fn get_category_color(sub_category: &SubCategory) -> Color {
     }
 }
 
-pub fn get_state_color(state_of_matter: &StateOfMatter) -> Color {
+pub fn state_of_matter_color(state_of_matter: &StateOfMatter) -> Color {
     match *state_of_matter {
         StateOfMatter::Solid   => Color::rgb(230, 149, 114),
         StateOfMatter::Gas     => Color::rgb(172, 230, 114),
@@ -30,17 +38,10 @@ pub fn get_state_color(state_of_matter: &StateOfMatter) -> Color {
     }
 }
 
-#[derive(Copy, Clone)]
-pub enum ColorizationMode {
-    None,
-    ByCategories,
-    ByStates,
-}
-
-pub fn get_element_color(element: &AtomInfo, cm: ColorizationMode) -> Color {
+pub fn atom_color(atom: &AtomInfo, cm: ColorizationMode) -> Color {
     match cm {
         ColorizationMode::None         => INACTIVE_COLOR,
-        ColorizationMode::ByCategories => get_category_color(&element.sub_category),
-        ColorizationMode::ByStates     => get_state_color(&element.state_of_matter),
+        ColorizationMode::ByCategories => sub_category_color(&atom.sub_category),
+        ColorizationMode::ByStates     => state_of_matter_color(&atom.state_of_matter),
     }
 }

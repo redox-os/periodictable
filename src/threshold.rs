@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(Copy, Clone)]
 pub enum Threshold<T: PartialOrd> {
     LessOrEqual(T),

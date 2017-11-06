@@ -1,5 +1,3 @@
-#![feature(const_fn)]
-
 extern crate natural_constants;
 extern crate orbclient;
 extern crate orbfont;
@@ -7,9 +5,9 @@ extern crate orbtk;
 #[macro_use]
 extern crate lazy_static;
 
-mod element_colors;
+mod colors;
+mod threshold;
 mod widgets;
-mod gfxutils;
 mod windows;
 
 fn main() {
