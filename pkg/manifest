@@ -1,0 +1,5 @@
+name=Periodic Table
+binary=/ui/bin/periodictable
+icon=/ui/icons/periodictable.png
+author=xTibor
+description=Periodic table browser for Redox OS
