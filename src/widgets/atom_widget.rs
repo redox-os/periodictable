@@ -17,6 +17,7 @@ pub struct AtomWidget {
     pub atom: Cell<&'static AtomInfo>,
     pub colorization: Cell<ColorizationMode>,
     click_callback: RefCell<Option<Arc<Fn(&AtomWidget, Point)>>>,
+    mouse_left_button: Cell<bool>,
 }
 
 impl AtomWidget {
@@ -25,7 +26,8 @@ impl AtomWidget {
             rect: Cell::new(Rect::default()),
             atom: Cell::new(e),
             colorization: Cell::new(ColorizationMode::None),
-            click_callback: RefCell::new(None)
+            click_callback: RefCell::new(None),
+            mouse_left_button: Cell::new(false),
         })
     }
 
@@ -80,11 +82,12 @@ impl Widget for AtomWidget {
         match event {
             Event::Mouse { point, left_button, .. } => {
                 let rect = self.rect.get();
-                if rect.contains(point) && left_button {
+                if rect.contains(point) && left_button && !self.mouse_left_button.get()  {
                     let click_point: Point = point - rect.point();
                     self.emit_click(click_point);
                     *redraw = true;
                 }
+                self.mouse_left_button.set(left_button);
             }
             _ => (),
         }

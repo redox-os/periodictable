@@ -1,6 +1,6 @@
 use natural_constants::chemistry::AtomInfo;
 use orbtk::traits::Place;
-use orbtk::{Rect, Text, TextBox, Window};
+use orbtk::{Rect, Text, TextBox, Window, EventFilter};
 
 use widgets::AtomWidget;
 use colors::ColorizationMode;
@@ -49,7 +49,8 @@ pub fn create_atom_window(atom: &'static AtomInfo, colorization: ColorizationMod
         let widget = TextBox::new();
         widget.position(192 + 16 + 16, 16)
             .size(292, 256)
-            .text(description);
+            .text(description)
+            .event_filter(move |_, _, _, _| None);
         window.add(&widget);
     }
 
