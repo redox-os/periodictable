@@ -1,8 +1,8 @@
 [package]
 name = "periodictable"
 description = "Periodic table browser for Redox OS"
-repository = "https://github.com/redox-os/orbutils"
-version = "0.0.1"
+repository = "https://github.com/xtibor/periodictable"
+version = "0.1.0"
 license-file = "LICENSE"
 readme = "README.md"
 authors = ["Tibor Nagy <xnagytibor@gmail.com>"]
@@ -13,7 +13,7 @@ path = "src/main.rs"
 
 [dependencies]
 natural_constants = { git = "https://github.com/xtibor/natural_constants", branch = "fix-radium"}
-orbclient = "0.3.12"
+orbclient = "0.3"
 orbfont = { git = "https://github.com/redox-os/orbfont" }
-orbtk = "0.2.25"
+orbtk = "0.2"
 lazy_static = "0.2"
