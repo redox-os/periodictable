@@ -1,5 +1,3 @@
-use std::thread;
-
 use natural_constants::chemistry::*;
 use orbtk::traits::{Place, Click};
 use orbtk::{Rect, Window};
@@ -72,5 +70,3 @@ pub fn create_main_window() -> Window {
 
     window
 }
-
-

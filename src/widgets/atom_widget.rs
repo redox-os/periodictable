@@ -6,14 +6,21 @@ use orbclient::Renderer;
 use orbtk::event::Event;
 use orbtk::point::Point;
 use orbtk::rect::Rect;
+use orbtk::theme::Theme;
+use orbtk::thickness::Thickness;
 use orbtk::traits::{Click, Place};
-use orbtk::widgets::Widget;
+use orbtk::widgets::{HorizontalPlacement, VerticalPlacement, Widget};
 
 use colors::{atom_color, ColorizationMode};
 use widgets::{draw_beveled_rect, draw_text, multiply_color};
 
 pub struct AtomWidget {
     rect: Cell<Rect>,
+    local_position: Cell<Point>,
+    vertical_placement: Cell<VerticalPlacement>,
+    horizontal_placement: Cell<HorizontalPlacement>,
+    margin: Cell<Thickness>,
+    children: RefCell<Vec<Arc<Widget>>>,
     pub atom: Cell<&'static AtomInfo>,
     pub colorization: Cell<ColorizationMode>,
     click_callback: RefCell<Option<Arc<Fn(&AtomWidget, Point)>>>,
@@ -24,6 +31,11 @@ impl AtomWidget {
     pub fn new(e: &'static AtomInfo) -> Arc<Self> {
         Arc::new(AtomWidget {
             rect: Cell::new(Rect::default()),
+            local_position: Cell::new(Point::new(0, 0)),
+            vertical_placement: Cell::new(VerticalPlacement::Absolute),
+            horizontal_placement: Cell::new(HorizontalPlacement::Absolute),
+            margin: Cell::new(Thickness::default()),
+            children: RefCell::new(vec![]),
             atom: Cell::new(e),
             colorization: Cell::new(ColorizationMode::None),
             click_callback: RefCell::new(None),
@@ -53,11 +65,35 @@ impl Click for AtomWidget {
 impl Place for AtomWidget {}
 
 impl Widget for AtomWidget {
+    fn name(&self) -> &str {
+        "Atom"
+    }
+
     fn rect(&self) -> &Cell<Rect> {
         &self.rect
     }
 
-    fn draw(&self, renderer: &mut Renderer, _focused: bool) {
+    fn local_position(&self) -> &Cell<Point> {
+        &self.local_position
+    }
+
+    fn vertical_placement(&self) -> &Cell<VerticalPlacement> {
+        &self.vertical_placement
+    }
+
+    fn horizontal_placement(&self) -> &Cell<HorizontalPlacement> {
+        &self.horizontal_placement
+    }
+
+    fn margin(&self) -> &Cell<Thickness> {
+        &self.margin
+    }
+
+    fn children(&self) -> &RefCell<Vec<Arc<Widget>>> {
+        &self.children
+    }
+
+    fn draw(&self, renderer: &mut Renderer, _focused: bool, _theme: &Theme) {
         let rect = self.rect.get();
         let e = self.atom.get();
 

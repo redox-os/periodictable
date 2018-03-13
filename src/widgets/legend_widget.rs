@@ -1,4 +1,4 @@
-use std::cell::Cell;
+use std::cell::{Cell, RefCell};
 use std::sync::Arc;
 
 use colors::{ColorizationMode, sub_category_color, state_of_matter_color};
@@ -6,12 +6,20 @@ use widgets::{draw_beveled_rect, draw_text, multiply_color};
 use natural_constants::chemistry::{SubCategory, StateOfMatter};
 use orbclient::{Color, Renderer};
 use orbtk::event::Event;
+use orbtk::point::Point;
 use orbtk::rect::Rect;
+use orbtk::theme::Theme;
+use orbtk::thickness::Thickness;
 use orbtk::traits::Place;
-use orbtk::widgets::Widget;
+use orbtk::widgets::{HorizontalPlacement, VerticalPlacement, Widget};
 
 pub struct LegendWidget {
     rect: Cell<Rect>,
+    local_position: Cell<Point>,
+    vertical_placement: Cell<VerticalPlacement>,
+    horizontal_placement: Cell<HorizontalPlacement>,
+    margin: Cell<Thickness>,
+    children: RefCell<Vec<Arc<Widget>>>,
     pub colorization: Cell<ColorizationMode>,
 }
 
@@ -19,6 +27,11 @@ impl LegendWidget {
     pub fn new() -> Arc<Self> {
         Arc::new(LegendWidget {
             rect: Cell::new(Rect::default()),
+            local_position: Cell::new(Point::new(0, 0)),
+            vertical_placement: Cell::new(VerticalPlacement::Absolute),
+            horizontal_placement: Cell::new(HorizontalPlacement::Absolute),
+            margin: Cell::new(Thickness::default()),
+            children: RefCell::new(vec![]),
             colorization: Cell::new(ColorizationMode::ByCategories),
         })
     }
@@ -32,11 +45,35 @@ impl LegendWidget {
 impl Place for LegendWidget {}
 
 impl Widget for LegendWidget {
+    fn name(&self) -> &str {
+        "Legend"
+    }
+
     fn rect(&self) -> &Cell<Rect> {
         &self.rect
     }
 
-    fn draw(&self, renderer: &mut Renderer, _focused: bool) {
+    fn local_position(&self) -> &Cell<Point> {
+        &self.local_position
+    }
+
+    fn vertical_placement(&self) -> &Cell<VerticalPlacement> {
+        &self.vertical_placement
+    }
+
+    fn horizontal_placement(&self) -> &Cell<HorizontalPlacement> {
+        &self.horizontal_placement
+    }
+
+    fn margin(&self) -> &Cell<Thickness> {
+        &self.margin
+    }
+
+    fn children(&self) -> &RefCell<Vec<Arc<Widget>>> {
+        &self.children
+    }
+
+    fn draw(&self, renderer: &mut Renderer, _focused: bool, _theme: &Theme) {
         let rect = self.rect.get();
 
         let mut draw_item = |index: i32, text: &'static str, color: &Color| {
