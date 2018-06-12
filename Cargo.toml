@@ -14,6 +14,6 @@ path = "src/main.rs"
 [dependencies]
 natural_constants = { git = "https://github.com/willi-kappler/natural_constants.git" }
 orbclient = "0.3"
-orbfont = { git = "https://github.com/redox-os/orbfont" }
+orbfont = { git = "https://gitlab.redox-os.org/redox-os/orbfont" }
 orbtk = "0.2"
 lazy_static = "0.2"
