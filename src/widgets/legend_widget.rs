@@ -107,7 +107,7 @@ impl Widget for LegendWidget {
         }
     }
 
-    fn event(&self, _event: Event, focused: bool, _redraw: &mut bool) -> bool {
+    fn event(&self, _event: Event, focused: bool, _redraw: &mut bool, _caught: &mut bool) -> bool {
         focused
     }
 }

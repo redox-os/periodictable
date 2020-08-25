@@ -114,7 +114,7 @@ impl Widget for AtomWidget {
         }
     }
 
-    fn event(&self, event: Event, focused: bool, redraw: &mut bool) -> bool {
+    fn event(&self, event: Event, focused: bool, redraw: &mut bool, _caught: &mut bool) -> bool {
         match event {
             Event::Mouse { point, left_button, .. } => {
                 let rect = self.rect.get();
